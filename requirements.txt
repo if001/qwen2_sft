@@ -1,0 +1,7 @@
+wandb
+transformers
+tqdm
+tokenizers
+datasets
+torch
+trl

@@ -5,3 +5,4 @@ tokenizers
 datasets
 torch
 trl
+peft

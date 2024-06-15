@@ -131,7 +131,10 @@ def format(ds):
 def load_datasets(data_files):
     datasets = []
     for data_file in data_files:
-        dataset = load_dataset("json", data_files=data_file, split="train")
+        if 'json' in data_file:
+            dataset = load_dataset("json", data_files=data_file, split="train")
+        else:
+            dataset = load_dataset(data_file, split="train")
         _new = []
         for v in dataset:
             _v  = format(v)

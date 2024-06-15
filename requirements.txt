@@ -6,3 +6,4 @@ datasets
 torch
 trl
 peft
+bitsandbytes

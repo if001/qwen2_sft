@@ -106,6 +106,10 @@ def format(ds):
             text = ds['instruction']
         output = ds['output']
 
+    if 'question_ja' in ds and 'generated_solution_ja' in ds:
+        text = ds['question_ja']
+        output = ds['generated_solution_ja']
+
     if ('q1' in ds) and ('a1' in ds) and ('q2' in ds) and ('a2' in ds):
         text = ds['q1'] + "\n" \
         + "### アシスタント:\n" \

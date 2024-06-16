@@ -14,6 +14,7 @@ from transformers import (
     DataCollatorForLanguageModeling
 )
 from trl import DataCollatorForCompletionOnlyLM, SFTTrainer, SFTConfig
+from callbacks import ComputeThroughputCallback
 
 disable_caching()
 
@@ -217,7 +218,18 @@ def main() -> None:
             model.gradient_checkpointing_enable()
             model.enable_input_require_grads()
 
+    model.print_trainable_parameters()
+
     logger.info("Setting up trainer")
+    computeThroughput = ComputeThroughputCallback(
+        vocab_size=model.config.vocab_size,
+        #seq_length=model.config.max_sequence_length,
+        seq_length=model.config.max_position_embeddings,
+        num_layers=model.config.num_hidden_layers,
+        hidden_size=model.config.hidden_size,
+        world_size=1,
+        log_steps=training_args.logging_steps ,
+    )
     trainer = SFTTrainer(
         model,
         args=training_args,
@@ -228,7 +240,8 @@ def main() -> None:
         data_collator=data_collator,
         peft_config=peft_config,
         # max_seq_length=sft_training_args.max_seq_length,
-        packing=True
+        packing=True,
+        callbacks=[computeThroughput]
     )
 
     logger.info("Training")

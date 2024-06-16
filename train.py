@@ -75,17 +75,6 @@ class SFTTrainingArguments:
                     f"so peft_target_modules is set to None."
                 )
 
-@dataclass
-class TrainingArgumentsWrap(TrainingArguments):
-    per_device_train_batch_size: int=1024
-    logging_steps:int = 10
-    lr_scheduler_type: str = 'constant'
-    save_total_limit: int = 3
-    save_strategy: str = "steps"
-    save_steps: int = 50
-    num_train_epochs: int = 1
-    gradient_checkpointing: bool = False
-
     def from_pretrained_kwargs(self, training_args):
         if self.load_in_8bit:
             kwargs = {"load_in_8bit": True}
@@ -104,6 +93,17 @@ class TrainingArgumentsWrap(TrainingArguments):
             kwargs = {"torch_dtype": torch.float16}
         kwargs["use_flash_attention_2"] = self.use_flash_attention_2
         return kwargs
+
+@dataclass
+class TrainingArgumentsWrap(TrainingArguments):
+    per_device_train_batch_size: int=1024
+    logging_steps:int = 10
+    lr_scheduler_type: str = 'constant'
+    save_total_limit: int = 3
+    save_strategy: str = "steps"
+    save_steps: int = 50
+    num_train_epochs: int = 1
+    gradient_checkpointing: bool = False
 
 def format(ds):
     if 'query' in ds and 'answer':

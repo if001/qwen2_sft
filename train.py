@@ -218,8 +218,6 @@ def main() -> None:
             model.gradient_checkpointing_enable()
             model.enable_input_require_grads()
 
-    model.print_trainable_parameters()
-
     logger.info("Setting up trainer")
     computeThroughput = ComputeThroughputCallback(
         vocab_size=model.config.vocab_size,

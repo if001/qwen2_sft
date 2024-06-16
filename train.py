@@ -249,6 +249,8 @@ def main() -> None:
         # max_seq_length=sft_training_args.max_seq_length,
         callbacks=[computeThroughput]
     )
+    if sft_training_args.use_peft:
+        trainer.model.print_trainable_parameters()
 
     logger.info("Training")
     trainer.train()

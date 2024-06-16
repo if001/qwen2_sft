@@ -104,6 +104,7 @@ class TrainingArgumentsWrap(TrainingArguments):
     save_steps: int = 50
     num_train_epochs: int = 1
     gradient_checkpointing: bool = False
+    dataset_num_proc = 8
 
 def format(ds):
     if 'query' in ds and 'answer':

@@ -39,6 +39,17 @@ class SFTTrainingArguments:
     peft_lora_alpha: int = 32
     peft_lora_dropout: float = 0.05
 
+@dataclass
+class TrainingArgumentsWrap(TrainingArguments):
+    per_device_train_batch_size: int=1024
+    logging_steps:int = 10
+    lr_scheduler_type: str = 'constant'
+    save_total_limit: int = 3
+    save_strategy: str = "steps"
+    save_steps: int = 50
+    num_train_epochs: int = 1
+    gradient_checkpointing: bool = True
+
     def __post_init__(self):
         if self.load_in_8bit and self.load_in_4bit:
             raise ValueError("load_in_8bit and load_in_4bit are mutually exclusive")
@@ -146,7 +157,7 @@ def load_datasets(data_files):
 
 
 def main() -> None:
-    parser = HfArgumentParser((TrainingArguments, SFTTrainingArguments))
+    parser = HfArgumentParser((TrainingArgumentsWrap, SFTTrainingArguments))
     training_args, sft_training_args = parser.parse_args_into_dataclasses()
 
     tokenizer_name_or_path: str = (
@@ -181,7 +192,7 @@ def main() -> None:
         trust_remote_code=True,
         **kwargs,
     )
-
+    model.to('cuda')
     peft_config: Optional[LoraConfig] = None
     if sft_training_args.use_peft:
         logger.info("Setting up LoRA")
@@ -213,6 +224,7 @@ def main() -> None:
         data_collator=data_collator,
         peft_config=peft_config,
         max_seq_length=sft_training_args.max_seq_length,
+        num_of_sequences=512,
         packing=True
     )
 

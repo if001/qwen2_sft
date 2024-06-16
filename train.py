@@ -159,6 +159,7 @@ def load_datasets(data_files):
 def main() -> None:
     parser = HfArgumentParser((TrainingArgumentsWrap, SFTTrainingArguments))
     training_args, sft_training_args = parser.parse_args_into_dataclasses()
+    print('training_args', training_args)
 
     tokenizer_name_or_path: str = (
         sft_training_args.tokenizer_name_or_path or sft_training_args.model_name_or_path

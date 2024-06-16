@@ -13,7 +13,7 @@ from transformers import (
     BitsAndBytesConfig,
     DataCollatorForLanguageModeling
 )
-from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
+from trl import DataCollatorForCompletionOnlyLM, SFTTrainer, SFTConfig
 
 disable_caching()
 
@@ -95,7 +95,7 @@ class SFTTrainingArguments:
         return kwargs
 
 @dataclass
-class TrainingArgumentsWrap(TrainingArguments):
+class TrainingArgumentsWrap(SFTConfig):
     per_device_train_batch_size: int=1024
     logging_steps:int = 10
     lr_scheduler_type: str = 'constant'

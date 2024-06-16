@@ -69,6 +69,13 @@ class SFTTrainingArguments:
                     "lm_head",
                     "embed_tokens",
                 ]
+            elif self.peft_target_model == "llama-mlp":
+                self.peft_target_modules = [
+                    "gate_proj",
+                    "up_proj",
+                    "down_proj",
+                    "lm_head",
+                ]
             else:
                 logger.warning(
                     f"peft_target_model '{self.peft_target_model}' is not supported, "
@@ -107,7 +114,9 @@ class TrainingArgumentsWrap(SFTConfig):
     dataset_num_proc:int = 8
     num_of_sequences:int = 512
     max_seq_length: int = 1024
+    ## sft
     neftune_noise_alpha: int = 5
+    packing=True
 
 def format(ds):
     if 'query' in ds and 'answer':
@@ -238,7 +247,6 @@ def main() -> None:
         data_collator=data_collator,
         peft_config=peft_config,
         # max_seq_length=sft_training_args.max_seq_length,
-        packing=True,
         callbacks=[computeThroughput]
     )
 

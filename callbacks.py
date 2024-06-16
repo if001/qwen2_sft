@@ -34,8 +34,7 @@ class ComputeThroughputCallback(TrainerCallback):
 
             # average_time_per_iter = self.total_time / self.iterations
             elapsed_time_per_iter = self.total_time / self.iterations
-            if int(os.environ['LOCAL_RANK']) == 0:
-                print(f"Elapsed Time per Iteration: {elapsed_time_per_iter:.2f} seconds")
+            print(f"Elapsed Time per Iteration: {elapsed_time_per_iter:.2f} seconds")
             
             effective_batch_size = args.per_device_train_batch_size * args.gradient_accumulation_steps * self.world_size
             tflops = self.compute_tflops(effective_batch_size, elapsed_time_per_iter)
@@ -49,11 +48,11 @@ class ComputeThroughputCallback(TrainerCallback):
                     "samples_per_sec": samples_per_sec,
                     "tokens_per_sec": tokens_per_sec
             }
-            if int(os.environ['LOCAL_RANK']) == 0:
-                print(f"tflops: {tflops:.2f}, samples_per_sec: {samples_per_sec}, tokens_per_sec: {tokens_per_sec}")
-                if wandb is not None:
-                # if wandb is not None and getattr(wandb, 'run', None) is not None:
-                    wandb.log(metrics)
+            
+            print(f"tflops: {tflops:.2f}, samples_per_sec: {samples_per_sec}, tokens_per_sec: {tokens_per_sec}")
+            if wandb is not None:
+            # if wandb is not None and getattr(wandb, 'run', None) is not None:
+                wandb.log(metrics)
 
             # 次の計測のために時刻をリセット
             self.start_time = None

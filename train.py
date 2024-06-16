@@ -28,7 +28,6 @@ class SFTTrainingArguments:
     tokenizer_name_or_path: Optional[str] = None
     use_fast: bool = True
     additional_special_tokens: List[str] = None
-    max_seq_length: int = 2048
     load_in_8bit: bool = False
     load_in_4bit: bool = False
     use_flash_attention_2: bool = False
@@ -104,7 +103,10 @@ class TrainingArgumentsWrap(SFTConfig):
     save_steps: int = 50
     num_train_epochs: int = 1
     gradient_checkpointing: bool = False
-    dataset_num_proc = 8
+    dataset_num_proc:int = 8
+    num_of_sequences:int = 512
+    max_seq_length: int = 1024
+    neftune_noise_alpha: int = 5
 
 def format(ds):
     if 'query' in ds and 'answer':
@@ -225,8 +227,7 @@ def main() -> None:
         dataset_text_field="text",
         data_collator=data_collator,
         peft_config=peft_config,
-        max_seq_length=sft_training_args.max_seq_length,
-        num_of_sequences=512,
+        # max_seq_length=sft_training_args.max_seq_length,
         packing=True
     )
 

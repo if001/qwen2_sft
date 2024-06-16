@@ -7,3 +7,4 @@ torch
 trl
 peft
 bitsandbytes
+flash-attn

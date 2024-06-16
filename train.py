@@ -39,17 +39,6 @@ class SFTTrainingArguments:
     peft_lora_alpha: int = 32
     peft_lora_dropout: float = 0.05
 
-@dataclass
-class TrainingArgumentsWrap(TrainingArguments):
-    per_device_train_batch_size: int=1024
-    logging_steps:int = 10
-    lr_scheduler_type: str = 'constant'
-    save_total_limit: int = 3
-    save_strategy: str = "steps"
-    save_steps: int = 50
-    num_train_epochs: int = 1
-    gradient_checkpointing: bool = False
-
     def __post_init__(self):
         if self.load_in_8bit and self.load_in_4bit:
             raise ValueError("load_in_8bit and load_in_4bit are mutually exclusive")
@@ -85,6 +74,17 @@ class TrainingArgumentsWrap(TrainingArguments):
                     f"peft_target_model '{self.peft_target_model}' is not supported, "
                     f"so peft_target_modules is set to None."
                 )
+
+@dataclass
+class TrainingArgumentsWrap(TrainingArguments):
+    per_device_train_batch_size: int=1024
+    logging_steps:int = 10
+    lr_scheduler_type: str = 'constant'
+    save_total_limit: int = 3
+    save_strategy: str = "steps"
+    save_steps: int = 50
+    num_train_epochs: int = 1
+    gradient_checkpointing: bool = False
 
     def from_pretrained_kwargs(self, training_args):
         if self.load_in_8bit:

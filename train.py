@@ -16,7 +16,7 @@ from transformers import (
 from trl import DataCollatorForCompletionOnlyLM, SFTTrainer, SFTConfig
 from callbacks import ComputeThroughputCallback
 import os
-os.environ['LOCAL_RANK'] = 0
+os.environ['LOCAL_RANK'] = "0"
 
 disable_caching()
 

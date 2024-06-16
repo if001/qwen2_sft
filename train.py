@@ -48,7 +48,7 @@ class TrainingArgumentsWrap(TrainingArguments):
     save_strategy: str = "steps"
     save_steps: int = 50
     num_train_epochs: int = 1
-    gradient_checkpointing: bool = True
+    gradient_checkpointing: bool = False
 
     def __post_init__(self):
         if self.load_in_8bit and self.load_in_4bit:
